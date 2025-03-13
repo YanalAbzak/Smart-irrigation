@@ -2,32 +2,44 @@
 #include <WiFiClient.h>
 #include <HTTPClient.h>
 
-const char* ssid = "Kinneret College";
-const char* serverDataURL = "http://10.9.1.10:3004/esp";
+// WiFi credentials
+const char* WIFI_SSID = "yanal";
+const char* SERVER_DATA_URL = "http://10.9.1.10:3004/esp";
 
 WiFiClient client;
 
-void WiFi_SETUP() {
-  WiFi.begin(ssid);
+/**
+ * Initializes the WiFi connection and waits until connected.
+ */
+void setupWiFi() {
+  WiFi.begin(WIFI_SSID);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
-  Serial.println("\nWiFi connected");
+  Serial.println("\nWiFi connected successfully");
 }
 
+/**
+ * Sends sensor data to the server.
+ * @param temp - Temperature value
+ * @param light - Light intensity value
+ * @param moisture - Soil moisture value
+ */
 void sendData(float temp, int light, int moisture) {
   HTTPClient http;
-  String dataUrl = "?temp=" + String(temp) + "&light=" + String(light) + "&moisture=" + String(moisture);
-  http.begin(client, serverDataURL + dataUrl);
-  Serial.println(dataUrl);
-  int httpCode = http.GET();
-  if (httpCode == HTTP_CODE_OK) {
+  String requestData = "?temp=" + String(temp) + "&light=" + String(light) + "&moisture=" + String(moisture);
+  http.begin(client, SERVER_DATA_URL + requestData);
+  Serial.println(requestData);
+
+  int httpResponseCode = http.GET();
+  if (httpResponseCode == HTTP_CODE_OK) {
     Serial.print("HTTP response code: ");
-    Serial.println(httpCode);
+    Serial.println(httpResponseCode);
   } else {
     Serial.print("HTTP Error: ");
-    Serial.println(httpCode);
+    Serial.println(httpResponseCode);
   }
+
   http.end();
 }
