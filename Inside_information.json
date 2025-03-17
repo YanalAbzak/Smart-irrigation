@@ -1,0 +1,16 @@
+{
+    "state": 1,
+    "tempMode": {
+      "temp": 25,
+      "minTime": 5,
+      "maxTime": 10
+    },
+    "soilMoistureMode": {
+      "desiredMoisture": 500
+    },
+    "sabbathMode": {
+      "startHour": 18,
+      "stopHour": 22
+    }
+  }
+  
