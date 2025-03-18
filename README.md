@@ -13,24 +13,27 @@ The **Smart Irrigation System** is a **Node.js-based backend** that manages plan
 ## 📂 Project Structure
 ```
 /smart-irrigation
-│── /models               # Sequelize Data Models
-│   ├── index.js          # Loads all models and defines relationships
-│   ├── plant.js          # Defines the plant model
-│   ├── tree.js           # Defines the tree planting model
-│   ├── sensorData.js     # Defines the sensor data model
-│── /routes               # API Routes
-│   ├── plants.js         # Handles plant-related operations
-│   ├── trees.js          # Handles tree planting operations
-│   ├── sensors.js        # Handles sensor data operations
-│   ├── esp.js            # Handles sensor data from ESP devices
-│   ├── state.js          # Manages system state (settings & irrigation modes)
-│── /config               # Configuration Files
-│   ├── config.js         # Database connection setup
-│── Inside_information.json  # Stores system state and irrigation settings
-│── server.js             # Main Express server file
-│── .env                  # Environment variables (DB credentials & API settings)
-│── package.json          # Node.js dependencies
-│── README.md             # Project documentation
+│── /backend
+│   │── /config
+│   │   ├── config.js      # Database connection
+│   │── /models
+│   │   ├── index.js       # Loads all models
+│   │   ├── plant.js       # Plant model
+│   │   ├── tree.js        # Tree model
+│   │   ├── sensorData.js  # Sensor data model
+│   │── /routes
+│   │   ├── plants.js      # Manage plants
+│   │   ├── trees.js       # Manage trees
+│   │   ├── sensors.js     # Handle sensor data
+│   │   ├── esp.js         # ESP data handling
+│   │   ├── state.js       # Manage system state
+│   │── .env               # Environment variables
+│   │── server.js          # Main Express server
+│   │── Inside_information.json  # Stores system settings
+│   │── package.json       # Dependencies
+│   │── package-lock.json  # Dependency lock file
+│   │── README.md          # Documentation
+│── /esp32                 # (If this is for ESP firmware, keep it separate)
 ```
 
 ## 🛠️ Installation
@@ -42,10 +45,11 @@ The **Smart Irrigation System** is a **Node.js-based backend** that manages plan
 
 2. **Install Dependencies**
    ```bash
+   cd backend
    npm install
    ```
 
-3. **Set Up Environment Variables** (`.env`)
+3. **Set Up Environment Variables** (`.env` in `backend/`)
    ```env
    DB_HOST=localhost
    DB_NAME=smart_irrigation
@@ -83,34 +87,4 @@ The **Smart Irrigation System** is a **Node.js-based backend** that manages plan
 | **PUT**  | `/state`         | Update system state |
 | **PUT**  | `/state/update-mode/:mode` | Update a specific mode (tempMode, soilMoistureMode, sabbathMode) |
 
-## 🧪 Testing the API
-### **Test with `curl` or Postman**
-- **Check system state:**
-  ```bash
-  curl -X GET http://localhost:3010/state
-  ```
-- **Update temperature mode:**
-  ```bash
-  curl -X PUT http://localhost:3010/state/update-mode/tempMode -H "Content-Type: application/json" -d '{"temp": 30, "minTime": 7}'
-  ```
-- **Send sensor data from ESP:**
-  ```bash
-  curl -X POST http://localhost:3010/esp -H "Content-Type: application/json" -d '{"treeId": 1, "temperature": 26, "lightIntensity": 600, "soilMoisture": 450, "isRunning": true}'
-  ```
 
-## 🎯 Future Enhancements
-- **Add authentication and user roles** for managing irrigation settings.
-- **Create a frontend dashboard** to visualize sensor data and system state.
-- **Implement AI-based irrigation optimization** using machine learning.
-
-## 🤝 Contributing
-1. Fork the repository
-2. Create a new branch (`feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add new feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
-
-## 📜 License
-This project is licensed under the MIT License.
-
-🚀 **Developed by [Your Name]** - Making smart irrigation easier! 🌿💧
