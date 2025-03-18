@@ -3,26 +3,30 @@ const morgan = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
+dotenv.config();
+
 const app = express();
 const HTTP_PORT = 3010;
 
-dotenv.config();
+app.use(express.json()); // Enable JSON body parsing
+app.use(cors()); // Enable CORS for API access
+app.use(morgan("dev")); // Log API requests
 
-app.use(express.json());
-app.use(cors());
-app.use(morgan("dev"));
+// Import API routes
+const plantRoutes = require("./routes/plants");
+const treeRoutes = require("./routes/trees");
+const sensorRoutes = require("./routes/sensors");
+const espRoutes = require("./routes/esp");
+const stateRoutes = require("./routes/state");
 
+// Register routes
+app.use("/plants", plantRoutes);
+app.use("/trees", treeRoutes);
+app.use("/sensors", sensorRoutes);
+app.use("/esp", espRoutes);
+app.use("/state", stateRoutes);
 
-const esp = require("./routes/esp");
-const state = require("./routes/state");
-const plants = require("./routes/plants");
-const threes = require("./routes/threes");
-
-app.use("/esp", esp);
-app.use("/state", state);
-app.use("/plants", plants);
-app.use("/threes", threes);
-
+// Start the server
 app.listen(HTTP_PORT, () => {
-  console.log(`Server running on http://localhost:${HTTP_PORT}`);
+    console.log(`✅ Server running on http://localhost:${HTTP_PORT}`);
 });
