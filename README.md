@@ -51,11 +51,11 @@ The **Smart Irrigation System** is a **Node.js-based backend** that manages plan
 
 3. **Set Up Environment Variables** (`.env` in `backend/`)
    ```env
-   DB_HOST=localhost
-   DB_NAME=smart_irrigation
-   DB_USER=root
-   DB_PASS=
-   PORT=3010
+   DB_HOST=your_database_host
+   DB_NAME=your_database_name
+   DB_USER=your_database_user
+   DB_PASS=your_database_password
+   PORT=your_server_port
    ```
 
 4. **Start MySQL Server**
