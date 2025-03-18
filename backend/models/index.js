@@ -1,4 +1,4 @@
-const sequelize = require("../config");
+const sequelize = require("../config/config");
 const Plant = require("./plant");
 const Tree = require("./tree");
 const SensorData = require("./sensorData");
