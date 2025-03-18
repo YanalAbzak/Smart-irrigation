@@ -1,49 +1,71 @@
 const express = require("express");
-const fs = require("fs");
+const fs = require("fs").promises; // Use async file handling
 const router = express.Router();
 const configFilePath = "Inside_information.json";
 
 /**
- * Route to retrieve all configuration settings
+ * Get the entire system configuration
  */
-router.get("/", (req, res) => {
-    const configData = JSON.parse(fs.readFileSync(configFilePath, "utf8"));
-    res.json(configData);
+router.get("/", async (req, res) => {
+    try {
+        const configData = await fs.readFile(configFilePath, "utf8");
+        res.json(JSON.parse(configData));
+    } catch (error) {
+        console.error("Error reading configuration file:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
 });
 
 /**
- * Route to update all configuration settings
+ * Update the entire system configuration
  */
-router.put("/", (req, res) => {
-    const updatedConfig = req.body;
-    fs.writeFileSync(configFilePath, JSON.stringify(updatedConfig, null, 2));
-    res.json({ message: "Configuration updated successfully" });
+router.put("/", async (req, res) => {
+    try {
+        await fs.writeFile(configFilePath, JSON.stringify(req.body, null, 2));
+        res.json({ message: "Configuration updated successfully" });
+    } catch (error) {
+        console.error("Error updating configuration file:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
 });
 
 /**
- * Route to update only the system state
+ * Update only the system state
  */
-router.put("/state", (req, res) => {
-    const { state } = req.body;
-    const configData = JSON.parse(fs.readFileSync(configFilePath, "utf8"));
-    configData.state = state;
-    fs.writeFileSync(configFilePath, JSON.stringify(configData, null, 2));
-    res.json({ message: "State updated successfully" });
+router.put("/state", async (req, res) => {
+    try {
+        const { state } = req.body;
+        const configData = JSON.parse(await fs.readFile(configFilePath, "utf8"));
+        configData.state = state;
+
+        await fs.writeFile(configFilePath, JSON.stringify(configData, null, 2));
+        res.json({ message: "State updated successfully" });
+    } catch (error) {
+        console.error("Error updating system state:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
 });
 
 /**
- * Route to update specific mode settings
- * @param {string} mode - The mode to be updated
+ * Update a specific mode (tempMode, soilMoistureMode, sabbathMode)
  */
-router.put("/update-mode/:mode", (req, res) => {
-    const { mode } = req.params;
-    const updatedModeData = req.body;
+router.put("/update-mode/:mode", async (req, res) => {
+    try {
+        const { mode } = req.params;
+        const updatedModeData = req.body;
+        const configData = JSON.parse(await fs.readFile(configFilePath, "utf8"));
 
-    const configData = JSON.parse(fs.readFileSync(configFilePath, "utf8"));
-    configData[mode] = updatedModeData;
-    fs.writeFileSync(configFilePath, JSON.stringify(configData, null, 2));
+        if (!configData[mode]) {
+            return res.status(400).json({ message: "Invalid mode" });
+        }
 
-    res.json({ message: `${mode} updated successfully` });
+        configData[mode] = { ...configData[mode], ...updatedModeData };
+        await fs.writeFile(configFilePath, JSON.stringify(configData, null, 2));
+        res.json({ message: `${mode} updated successfully` });
+    } catch (error) {
+        console.error(`Error updating mode ${mode}:`, error);
+        res.status(500).json({ message: "Internal server error" });
+    }
 });
 
 module.exports = router;
