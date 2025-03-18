@@ -1,10 +1,10 @@
 const express = require("express");
-const fs = require("fs").promises; // Use async file handling
+const fs = require("fs").promises;
 const router = express.Router();
 const configFilePath = "Inside_information.json";
 
 /**
- * Get the entire system configuration
+ * Route to retrieve the current system configuration from JSON
  */
 router.get("/", async (req, res) => {
     try {
@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 });
 
 /**
- * Update the entire system configuration
+ * Route to update the entire system configuration in JSON
  */
 router.put("/", async (req, res) => {
     try {
@@ -30,7 +30,7 @@ router.put("/", async (req, res) => {
 });
 
 /**
- * Update only the system state
+ * Route to update only the system state (1 = manual, 2 = automatic)
  */
 router.put("/state", async (req, res) => {
     try {
@@ -42,28 +42,6 @@ router.put("/state", async (req, res) => {
         res.json({ message: "State updated successfully" });
     } catch (error) {
         console.error("Error updating system state:", error);
-        res.status(500).json({ message: "Internal server error" });
-    }
-});
-
-/**
- * Update a specific mode (tempMode, soilMoistureMode, sabbathMode)
- */
-router.put("/update-mode/:mode", async (req, res) => {
-    try {
-        const { mode } = req.params;
-        const updatedModeData = req.body;
-        const configData = JSON.parse(await fs.readFile(configFilePath, "utf8"));
-
-        if (!configData[mode]) {
-            return res.status(400).json({ message: "Invalid mode" });
-        }
-
-        configData[mode] = { ...configData[mode], ...updatedModeData };
-        await fs.writeFile(configFilePath, JSON.stringify(configData, null, 2));
-        res.json({ message: `${mode} updated successfully` });
-    } catch (error) {
-        console.error(`Error updating mode ${mode}:`, error);
         res.status(500).json({ message: "Internal server error" });
     }
 });
