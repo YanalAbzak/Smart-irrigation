@@ -68,10 +68,6 @@ The **Smart Irrigation System** is a **Node.js-based backend** that manages plan
    ```bash
    node server.js
    ```
-   or using `nodemon`:
-   ```bash
-   npx nodemon server.js
-   ```
 
 ## 📡 API Endpoints
 | Method | Endpoint          | Description |
