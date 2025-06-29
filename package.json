@@ -1,0 +1,26 @@
+{
+  "name": "smart-irrigation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abzakcd/Smart-irrigation.git"
+  },
+  "private": true,
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.13.0",
+    "sequelize": "^6.37.6",
+    "supertest": "^7.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
